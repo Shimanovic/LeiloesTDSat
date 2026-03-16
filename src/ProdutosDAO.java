@@ -24,10 +24,29 @@ public class ProdutosDAO {
     
     public void cadastrarProduto (ProdutosDTO produto){
         
+        String sql = "INSERT INTO produtos (nome, valor, status) VALUES (?, ?, ?)";
         
-        //conn = new conectaDAO().connectDB();
-        
-        
+        try {
+            conn = new conectaDAO().connectDB();
+            prep = conn.prepareStatement(sql);
+            prep.setString(1, produto.getNome());
+            prep.setInt(2, produto.getValor());
+            prep.setString(3, produto.getStatus());
+            
+            int resultado = prep.executeUpdate();
+            
+            if (resultado > 0) {
+                JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Erro ao cadastrar produto.");
+            }
+            
+            prep.close();
+            conn.close();
+            
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(null, "Erro ao cadastrar: " + erro.getMessage());
+        }
     }
     
     public ArrayList<ProdutosDTO> listarProdutos(){
